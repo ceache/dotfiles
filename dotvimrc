@@ -1,5 +1,22 @@
-set encoding=utf-8
+" Terminal fixups done first.
+" {{{
+if has('multi_byte')
+    set encoding=utf-8
+endif
+if &term == 'screen'
+    set termencoding=utf8
+    " Force 256 color.
+    set t_Co=256
+endif
+if &t_Co == 256
+    " Disable Background Color Erase (BCE) so that color schemes
+    " work properly when Vim is used inside tmux and GNU screen.
+    set t_ut=
+endif
+" }}}
 
+" Plugins
+" {{{
 function! Cond(cond, ...)
   let opts = get(a:000, 0, {})
   return a:cond ? opts : extend(opts, { 'on': [], 'for': [] })
@@ -8,9 +25,11 @@ endfunction
 call plug#begin('~/.vim/bundles')
 
 Plug 'tpope/vim-sensible'
-Plug 'lifepillar/vim-solarized8'
 Plug 'jceb/vim-hier'
 Plug 'timakro/vim-searchant'
+
+Plug 'lifepillar/vim-solarized8',           Cond(&t_Co >= 16)
+Plug 'altercation/vim-colors-solarized',    Cond(&t_Co < 16)
 
 Plug 'ctrlpvim/ctrlp.vim'
 
@@ -27,11 +46,20 @@ Plug 'prabirshrestha/asyncomplete-necovim.vim'
 Plug 'rust-lang/rust.vim'
 
 call plug#end()
+" }}}
 
 " Solarized
 " {{{
 set background=dark
-colorscheme solarized8_dark_high
+if &t_Co == 16
+    " Tell solized8 (below) to downgrade to 16 colors (should be automatic!?!).
+    let g:solarized_use16 = 1
+endif
+if &t_Co >= 16
+    colorscheme solarized8_dark_high
+else
+    colorscheme solarized
+endif
 " }}}
 
 " LSP
@@ -77,8 +105,8 @@ autocmd Filetype make setlocal noexpandtab
 " {{{
 " Display line number in gutter.
 set number
-" Add a visible column at 80.
-set colorcolumn=80
+" Add a visible column at 79.
+set colorcolumn=79
 " Disable buffer resize on close.
 set noequalalways
 
@@ -88,7 +116,18 @@ set ignorecase
 set smartcase
 " }}}
 
-" Rust options
+" CtrlP options.
+" {{{
+let g:ctrlp_user_command = {
+    \ 'types': {
+      \ 1: ['.git', 'cd %s && git ls-files . -co --exclude-standard'],
+      \ 2: ['.hg', 'hg --cwd %s locate -I .'],
+      \ },
+    \ 'fallback': 'find %s -type f'
+    \ }
+" }}}
+
+" Rust options.
 " {{{
 let g:rustfmt_autosave = 1
 " }}}
