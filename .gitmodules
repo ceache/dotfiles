@@ -1,0 +1,4 @@
+[submodule "dotvim/gits/vim-plug"]
+	path = dotvim/gits/vim-plug
+	url = https://github.com/junegunn/vim-plug
+	shallow = true

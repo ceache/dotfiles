@@ -1,0 +1,116 @@
+function! Cond(cond, ...)
+  let opts = get(a:000, 0, {})
+  return a:cond ? opts : extend(opts, { 'on': [], 'for': [] })
+endfunction
+
+call plug#begin('~/.vim/bundles')
+
+Plug 'tpope/vim-sensible'
+Plug 'lifepillar/vim-solarized8'
+Plug 'jceb/vim-hier'
+Plug 'timakro/vim-searchant'
+
+Plug 'ctrlpvim/ctrlp.vim'
+
+Plug 'prabirshrestha/async.vim'
+Plug 'skywind3000/asyncrun.vim'
+Plug 'prabirshrestha/asyncomplete.vim'
+
+Plug 'prabirshrestha/vim-lsp'
+Plug 'prabirshrestha/asyncomplete-lsp.vim'
+
+Plug 'Shougo/neco-vim'
+Plug 'prabirshrestha/asyncomplete-necovim.vim'
+
+Plug 'rust-lang/rust.vim'
+
+call plug#end()
+
+" Solarized
+" {{{
+colorscheme solarized8_high
+set background=dark
+" }}}
+
+" LSP
+" {{{
+" enable signs
+let g:lsp_signs_enabled = 1
+" enable echo under cursor when in normal mode
+let g:lsp_diagnostics_echo_cursor = 1
+let g:lsp_signs_error = {'text': '✗'}
+highlight link LspErrorText ErrorMsg
+let g:lsp_signs_warning = {'text': '‼'}
+highlight link LspWarningText WarningMsg
+let g:lsp_signs_hint = {'text': 'i'}
+highlight link LspInfoText Normal
+" }}}
+
+" QuickFix window
+" {{{
+" Fix the background of the current line in the Quick window.
+highlight QuickFixLine ctermbg=0
+let g:hier_highlight_group_qf='LspErrorText'
+let g:hier_highlight_group_qfw='LspWarnText'
+let g:hier_highlight_group_qfi='LspInfoText'
+" }}}
+
+" Highligh end of lines
+" {{{
+highlight ExtraWhitespace ctermbg=darkcyan guibg=darkcyan
+" Show trailing whitepaces:
+autocmd Syntax * syn match ExtraWhitespace /\s\+\%#\@<!$/
+" }}}
+
+" Tab control
+" {{{
+set tabstop=4
+set shiftwidth=4
+set softtabstop=4
+set expandtab
+autocmd Filetype make setlocal noexpandtab
+" }}}
+
+" Various settings
+" {{{
+set number
+set colorcolumn=80
+" }}}
+
+" Rust options
+" {{{
+let g:rustfmt_autosave = 1
+" }}}
+
+" Code Complete
+" {{{
+inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<cr>"
+
+au User asyncomplete_setup call asyncomplete#register_source(
+    \ asyncomplete#sources#necovim#get_source_options({
+        \ 'name': 'necovim',
+        \ 'whitelist': ['vim'],
+        \ 'completor': function('asyncomplete#sources#necovim#completor'),
+        \ })
+    \ )
+
+if executable('pyls')
+    " pip install python-language-server
+    au User lsp_setup call lsp#register_server({
+        \ 'name': 'pyls',
+        \ 'cmd': {server_info->['pyls']},
+        \ 'whitelist': ['python'],
+        \ })
+
+endif
+
+if executable('rls')
+    au User lsp_setup call lsp#register_server({
+        \ 'name': 'rls',
+        \ 'cmd': {server_info->['rls']},
+        \ 'whitelist': ['rust'],
+        \ })
+endif
+" }}}
