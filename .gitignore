@@ -103,4 +103,5 @@ ENV/
 ########
 # Ignore vim installed bundles.
 dotvim/bundles/
-
+# Ignore vim history
+dotvim/.netrwhist
