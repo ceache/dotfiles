@@ -28,20 +28,20 @@ Plug 'tpope/vim-sensible'
 Plug 'jceb/vim-hier'
 Plug 'timakro/vim-searchant'
 
-Plug 'lifepillar/vim-solarized8',           Cond(&t_Co >= 16)
-Plug 'altercation/vim-colors-solarized',    Cond(&t_Co < 16)
+Plug 'lifepillar/vim-solarized8',                   Cond(&t_Co >= 16)
+Plug 'altercation/vim-colors-solarized',            Cond(&t_Co < 16)
 
 Plug 'ctrlpvim/ctrlp.vim'
 
 Plug 'prabirshrestha/async.vim'
 Plug 'skywind3000/asyncrun.vim'
-Plug 'prabirshrestha/asyncomplete.vim'
+Plug 'prabirshrestha/asyncomplete.vim',             Cond(has('timers'))
 
-Plug 'prabirshrestha/vim-lsp'
-Plug 'prabirshrestha/asyncomplete-lsp.vim'
+Plug 'prabirshrestha/vim-lsp',                      Cond(has('timers'))
+Plug 'prabirshrestha/asyncomplete-lsp.vim',         Cond(has('timers'))
 
 Plug 'Shougo/neco-vim'
-Plug 'prabirshrestha/asyncomplete-necovim.vim'
+Plug 'prabirshrestha/asyncomplete-necovim.vim',     Cond(has('timers'))
 
 Plug 'rust-lang/rust.vim'
 
