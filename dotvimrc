@@ -27,6 +27,7 @@ call plug#begin('~/.vim/bundles')
 Plug 'tpope/vim-sensible'
 Plug 'jceb/vim-hier'
 Plug 'timakro/vim-searchant'
+Plug 'ConradIrwin/vim-bracketed-paste'
 
 Plug 'lifepillar/vim-solarized8',                   Cond(&t_Co >= 16)
 Plug 'altercation/vim-colors-solarized',            Cond(&t_Co < 16)
