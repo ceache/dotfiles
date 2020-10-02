@@ -1,68 +1,46 @@
 # If you come from bash you might have to change your $PATH.
-# export PATH=$HOME/bin:/usr/local/bin:$PATH
 
-# Path to your oh-my-zsh installation.
-export ZSH=$HOME/local/dotfiles/oh-my-zsh
+source ${HOME}/.zinit/bin/zinit.zsh
 
-# Set name of the theme to load. Optionally, if you set this to "random"
-# it'll load a random theme each time that oh-my-zsh is loaded.
-# See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
-ZSH_THEME="agnoster"
+setopt promptsubst
 
-# Set list of themes to load
-# Setting this variable when ZSH_THEME=random
-# cause zsh load theme from this variable instead of
-# looking in ~/.oh-my-zsh/themes/
-# An empty array have no effect
-# ZSH_THEME_RANDOM_CANDIDATES=( "robbyrussell" "agnoster" )
+SAVEHIST=10000
+HISTSIZE=10000
+HISTFILE=~/.zsh_history
 
-# Uncomment the following line to use case-sensitive completion.
-CASE_SENSITIVE="true"
+setopt sharehistory
+setopt histnostore
+setopt histnofunctions
+setopt histsavenodups
+setopt histignoredups
+setopt histignorealldups
+setopt histignorespace
 
-# Uncomment the following line to use hyphen-insensitive completion. Case
-# sensitive completion must be off. _ and - will be interchangeable.
-# HYPHEN_INSENSITIVE="true"
+setopt histverify
 
-# Uncomment the following line to disable bi-weekly auto-update checks.
-DISABLE_AUTO_UPDATE="true"
+zinit wait lucid light-mode for \
+        OMZL::git.zsh \
+    atload'zinit cdclear -q' \
+        OMZP::git
 
-# Uncomment the following line to change how often to auto-update (in days).
-# export UPDATE_ZSH_DAYS=13
+PS1="READY >" # provide a simple prompt till the theme loads
 
-# Uncomment the following line to disable colors in ls.
-# DISABLE_LS_COLORS="true"
+zinit wait'!' lucid light-mode for \
+        OMZL::prompt_info_functions.zsh \
+        OMZT::agnoster
 
-# Uncomment the following line to disable auto-setting terminal title.
-# DISABLE_AUTO_TITLE="true"
+zinit wait lucid light-mode for \
+    atinit"ZINIT[COMPINIT_OPTS]=-C; zicompinit; zicdreplay" \
+        zdharma/fast-syntax-highlighting \
+        OMZP::colored-man-pages \
+    atload"!_zsh_autosuggest_start" \
+        zsh-users/zsh-autosuggestions \
+        zdharma/history-search-multi-word \
+    blockf atpull'zinit creinstall -q .' \
+        zsh-users/zsh-completions
 
-# Uncomment the following line to enable command auto-correction.
-# ENABLE_CORRECTION="true"
-
-# Uncomment the following line to display red dots whilst waiting for completion.
-COMPLETION_WAITING_DOTS="true"
-
-# Uncomment the following line if you want to disable marking untracked files
-# under VCS as dirty. This makes repository status check for large repositories
-# much, much faster.
-DISABLE_UNTRACKED_FILES_DIRTY="true"
-
-# Uncomment the following line if you want to change the command execution time
-# stamp shown in the history command output.
-# The optional three formats: "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
-# HIST_STAMPS="mm/dd/yyyy"
-
-# Would you like to use another custom folder than $ZSH/custom?
-# ZSH_CUSTOM=/path/to/new-custom-folder
-
-# Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
-# Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
-# Example format: plugins=(rails git textmate ruby lighthouse)
-# Add wisely, as too many plugins slow down shell startup.
-plugins=(
-  gitfast man dotenv
-)
-
-source $ZSH/oh-my-zsh.sh
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#000,bg=#555"
+zstyle :plugin:history-search-multi-word reset-prompt-protect 1
 
 # User configuration
 
@@ -95,3 +73,7 @@ LESS=-XRF
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
+
+if [ -e ${HOME}/.nix-profile/etc/profile.d/nix.sh ]; then
+    source ${HOME}/.nix-profile/etc/profile.d/nix.sh
+fi

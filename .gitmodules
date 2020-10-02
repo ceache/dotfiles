@@ -2,10 +2,9 @@
 	path = dotvim/gits/vim-plug
 	url = https://github.com/junegunn/vim-plug
 	shallow = true
-[submodule "oh-my-zsh"]
-	path = oh-my-zsh
-	url = https://github.com/robbyrussell/oh-my-zsh
-	shallow = true
 [submodule "fonts"]
 	path = fonts
 	url = https://github.com/powerline/fonts.git
+[submodule "zinit"]
+	path = dotzinit/bin
+	url = https://github.com/zdharma/zinit.git
